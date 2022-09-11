@@ -7,6 +7,9 @@ from helpers import *
 
 st.title('Pace predictor')
 
+#calculate_overall_time(1, 1) #remove
+
+
 records = pd.read_csv('records.csv')
 
 ####################################################

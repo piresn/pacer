@@ -20,15 +20,19 @@ def calculate_overall_time(distance, speed):
 
     total_seconds = (distance*3600)/(speed*1000)
 
-    #TODO fix
+    #TODO fix (showa e.g. 4:60 instead of 5:00)
 
     h=0
     m=0
     s=0
     m=total_seconds//60
-    s=round(total_seconds%60, 1)
-    h=m//60
-    m=m%60
+    h=int(m//60)
+    m=int(m%60)
+    if h+m > 0:
+        s=f'{round(total_seconds%60)}'.zfill(2)
+    elif h+m==0:
+        s=f'{round(total_seconds%60, 2)}'.zfill(5)
 
-    return f'{h}:{m}:{s}'
+
+    return f'{h}:' + f'{m}'.zfill(2) + f':{s}'
 
