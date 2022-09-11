@@ -17,9 +17,13 @@ def kmh_to_pace(x, decimals):
     return x
 
 def calculate_overall_time(distance, speed):
+
+    total_seconds = (distance*3600)/(speed*1000)
+
     #TODO implement
+
     h=0
     m=0
-    s=1
+    s=round(total_seconds)
     return f'{h}:{m}:{s}'
 

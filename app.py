@@ -76,4 +76,4 @@ a = alt.Chart(records).mark_circle().encode(
 
 st.altair_chart(a)
 
-st.write(records[records.Group == 'User'][['Distance', 'Pace']])
+st.write(records[records.Group == 'User'][['Distance', 'Pace', 'Time']])
