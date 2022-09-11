@@ -50,12 +50,12 @@ with st.sidebar:
     UserPace.calculate_percentage_best(records)
 
 
-    st.write(f'User pace: {UserPace.print()} is {UserPace.percentage_best}% of maximum speed.')
+    st.write(f'User pace: {UserPace.print()} is {round(UserPace.percentage_best*100, 2)}% of maximum speed.')
 
 
 ####################################################
 
-records['User'] = records['Men'] * UserPace.percentage_best/100
+records['User'] = records['Men'] * UserPace.percentage_best
 
 records = records.melt(
     id_vars=['Event', 'Distance'], var_name='Group', value_name='Speed')

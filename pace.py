@@ -4,10 +4,14 @@ class SpeedModel:
     def __init__(self, records):
         self.records=records
 
-    def calculate(self, pace):
-        #TODO implement
+    def calculate(self, distance, pace):
+        best_men = self.records.loc[self.records['Distance']==distance]['Men'].iat[0]
+        p = Pace()
+        p.pace_from_kmh(best_men)
+        best_men_pace = p.print(unit='secskm')
 
-        return 68
+
+        return best_men_pace/pace
     
 
 
@@ -24,11 +28,12 @@ class Pace:
     def pace_from_distance(self, meters, seconds, hours=0, minutes=0):
         time = seconds+60*minutes+3600*hours
         km = meters/1000
+        self.distanceEvent = meters
         self.pace = time/km
 
     def calculate_percentage_best(self, records):
         s = SpeedModel(records)
-        self.percentage_best = s.calculate(self.pace)
+        self.percentage_best = s.calculate(self.distanceEvent, self.pace)
 
     def print(self, decimals=0, unit='minkm'):
 
@@ -40,3 +45,5 @@ class Pace:
                 return round(out, decimals)
             else:
                 return round(out)
+        elif unit=='secskm':
+            return self.pace
