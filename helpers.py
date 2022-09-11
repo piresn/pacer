@@ -43,4 +43,6 @@ class Pace:
                 return round(out)
 
 
-
+def calculate_user_percentage():
+    #TODO implement
+    return 68
