@@ -16,3 +16,10 @@ def kmh_to_pace(x, decimals):
     x = seckm_to_minkm(x, decimals)
     return x
 
+def calculate_overall_time(distance, speed):
+    #TODO implement
+    h=0
+    m=0
+    s=1
+    return f'{h}:{m}:{s}'
+

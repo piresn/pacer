@@ -62,6 +62,9 @@ records = records.melt(
 
 records['Pace'] = records['Speed'].apply(kmh_to_pace, decimals=False)
 
+records['Time'] = records[['Distance', 'Speed']].apply(lambda x: calculate_overall_time(
+    x['Distance'], x['Speed']), axis=1)
+
 ####################################################
 
 a = alt.Chart(records).mark_circle().encode(
