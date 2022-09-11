@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import altair as alt
+from pace import Pace
 from helpers import *
 
 st.title('Pace predictor')
@@ -46,15 +47,15 @@ with st.sidebar:
                                      minutes=user_pace_min,
                                      hours=user_pace_hour)
 
+    UserPace.calculate_percentage_best(records)
 
-    user_percentage = calculate_user_percentage()
 
-    st.write(f'User pace: {UserPace.print()} is {user_percentage}% of maximum speed.')
+    st.write(f'User pace: {UserPace.print()} is {UserPace.percentage_best}% of maximum speed.')
 
 
 ####################################################
 
-records['User'] = records['Men'] * user_percentage/100
+records['User'] = records['Men'] * UserPace.percentage_best/100
 
 records = records.melt(
     id_vars=['Event', 'Distance'], var_name='Group', value_name='Speed')
