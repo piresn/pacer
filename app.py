@@ -28,16 +28,16 @@ with st.sidebar:
 
     with col1:
 
-        user_pace_hour = st.number_input('hour',
-                                         min_value=0, max_value=100, value=0, step=1)
+        user_pace_hour = st.slider('hour',
+                                         min_value=0, max_value=12, value=0, step=1)
 
     with col2:
 
-        user_pace_min = st.number_input('min',
-                                        min_value=0, max_value=30, value=5, step=1)
+        user_pace_min = st.slider('min',
+                                        min_value=0, max_value=59, value=5, step=1)
 
     with col3:
-        user_pace_sec = st.number_input('sec',
+        user_pace_sec = st.slider('sec',
                                         min_value=0, max_value=59, value=0, step=1)
 
 
