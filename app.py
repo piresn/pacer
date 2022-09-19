@@ -10,7 +10,7 @@ st.title('Pace predictor')
 #calculate_overall_time(1, 1) #remove
 
 
-records = pd.read_csv('records.csv')
+records = pd.read_csv('records_alt.csv') #TODO update
 
 ####################################################
 

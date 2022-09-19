@@ -1,17 +1,29 @@
 from helpers import *
+import pandas as pd
 
 class SpeedModel:
     def __init__(self, records):
-        self.records=records
+
+        self.records = records.melt(id_vars=['Event', 'Distance'],
+                                    var_name='Group',
+                                    value_name='Timestring')
+
+        times = pd.DataFrame.from_records(data=self.records['Timestring'].apply(time_parser),
+                                          columns=['Hours', 'Minutes', 'Seconds'])
+
+        self.records = pd.concat([self.records, times], axis=1)
+
+        self.records['Pace'] = 240 # TODO implement funtion calculate pace secs/km from distance and h m s
+
+
+
 
     def calculate(self, distance, pace):
-        best_men = self.records.loc[self.records['Distance']==distance]['Men'].iat[0]
-        p = Pace()
-        p.pace_from_kmh(best_men)
-        best_men_pace = p.print(unit='secskm')
+        best_men = self.records.loc[(self.records['Distance'] == distance) & (
+            self.records['Group'] == 'Men')]['Pace'].iat[0]
 
 
-        return best_men_pace/pace
+        return best_men/pace
     
 
 

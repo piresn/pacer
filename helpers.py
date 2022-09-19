@@ -1,8 +1,8 @@
-def time_to_pace(x):
+def time_parser(x):
     
     units=x.split(":")
 
-    hours, minutes, seconds = 0, 0, 0
+    hours, minutes, seconds = 0, 0, 0.0
 
     seconds = units.pop(-1)
 
@@ -12,10 +12,8 @@ def time_to_pace(x):
     if len(units) > 0:
         hours = units.pop(-1)
     
-    return hours, minutes, seconds
+    return int(hours), int(minutes), float(seconds)
 
-
-time_to_pace("1:59:01")
 
 def kmh_to_seckm(x):
      return round(3600/x)
