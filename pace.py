@@ -43,7 +43,7 @@ class Pace:
         self.distanceEvent = meters
         self.pace = time/km
 
-    def calculate_percentage_best(self, records):
+    def calculate_percentage_best(self, records): #TODO this method + SpeedModel should be removed from Pace class
         s = SpeedModel(records)
         self.percentage_best = s.calculate(self.distanceEvent, self.pace)
 
