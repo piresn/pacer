@@ -59,20 +59,17 @@ with st.sidebar:
 
 ####################################################
 
-userpaces = records.get_proportion_pace(proportion=0.5)
+userpaces = records.get_proportion_pace(proportion=UserPace.percentage_best)
 
-
-# userpaces['PredictedTime'] = userpaces[['Distance', 'Speed']].apply(lambda x: calculate_overall_time(
-#    x['Distance'], x['Speed']), axis=1)
 
 ####################################################
 
-st.write(userpaces[['Event', 'PredictedPace', 'PredictedTime']])
+st.write(userpaces[['Event', 'PredictedPace', 'Predicted Time (h:m:s)']])
 
 a = alt.Chart(userpaces).mark_circle().encode(
     x=alt.Y('Distance', scale=alt.Scale(type="log")),
     y=alt.Y('PredictedPace', scale=alt.Scale(type="log")),
-    tooltip=['Distance', 'PredictedPace', 'PredictedTime']
+    tooltip=['Distance', 'PredictedPace', 'Predicted Time (h:m:s)']
 )
 
 st.altair_chart(a)

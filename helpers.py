@@ -33,11 +33,11 @@ def kmh_to_pace(x, decimals):
     x = seckm_to_minkm(x, decimals)
     return x
 
-def calculate_overall_time(distance, speed):
+def ParseTotalSeconds(total_seconds):
 
-    total_seconds = (distance*3600)/(speed*1000)
+    #total_seconds = (distance*3600)/(speed*1000)
 
-    #TODO fix (showa e.g. 4:60 instead of 5:00)
+    #TODO ? fix (showa e.g. 4:60 instead of 5:00)
 
     h=0
     m=0
