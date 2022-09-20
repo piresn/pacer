@@ -13,20 +13,23 @@ class SpeedModel:
 
         self.records = pd.concat([self.records, times], axis=1)
 
-        self.records['Pace'] = 240 # TODO implement funtion calculate pace secs/km from distance and h m s
-    
+        TotalSeconds = self.records['Seconds'] + self.records['Minutes']*60 + self.records['Hours']*3600
+
+        self.records['SecKm'] = TotalSeconds / (self.records['Distance']/1000)
+
+
 
     def calculate(self, distance, pace):
         best_men = self.records.loc[(self.records['Distance'] == distance) & (
-        self.records['Group'] == 'Men')]['Pace'].iat[0]
+        self.records['Group'] == 'Men')]['SecKm'].iat[0]
 
         return best_men/pace
 
     def get_proportion_pace(self, proportion):
         tmp = self.records[self.records['Group'] == 'Men'][[
-            'Event', 'Distance', 'Pace']].copy(deep=True)
+            'Event', 'Distance', 'SecKm']].copy(deep=True)
         
-        tmp['PredictedPace'] = tmp['Pace'] * proportion
+        tmp['PredictedPace'] = tmp['SecKm'] / proportion
 
         tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
