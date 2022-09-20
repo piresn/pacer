@@ -3,14 +3,14 @@ import numpy as np
 import streamlit as st
 import altair as alt
 from pace import Pace
+from speedmodel import SpeedModel
 from helpers import *
 
 st.title('Pace predictor')
 
-#calculate_overall_time(1, 1) #remove
+records = SpeedModel(pd.read_csv('records.csv'))
 
-
-records = pd.read_csv('records_alt.csv') #TODO update
+rawtable = pd.read_csv('records.csv') # TODO replace rawtable uses with SpeedModel methods
 
 ####################################################
 
@@ -40,17 +40,18 @@ with st.sidebar:
         user_pace_sec = st.slider('sec',
                                         min_value=0, max_value=59, value=0, step=1)
 
+####################################################
 
     UserPace = Pace()
 
-    user_distance = records.loc[records['Event']==user_event]['Distance'].iat[0]
+    user_distance = rawtable.loc[rawtable['Event']==user_event]['Distance'].iat[0]
 
     UserPace.pace_from_distance(meters=user_distance,
                                      seconds=user_pace_sec,
                                      minutes=user_pace_min,
                                      hours=user_pace_hour)
 
-    UserPace.calculate_percentage_best(records)
+    UserPace.calculate_percentage_best(rawtable)
 
 
     st.write(f'User pace: {UserPace.print()} is {round(UserPace.percentage_best*100, 2)}% of maximum speed.')
@@ -58,25 +59,20 @@ with st.sidebar:
 
 ####################################################
 
-records['User'] = records['Men'] * UserPace.percentage_best
+userpaces = records.get_proportion_pace(proportion=0.5)
 
-records = records.melt(
-    id_vars=['Event', 'Distance'], var_name='Group', value_name='Speed')
 
-records['Pace'] = records['Speed'].apply(kmh_to_pace, decimals=False)
-
-records['Time'] = records[['Distance', 'Speed']].apply(lambda x: calculate_overall_time(
-    x['Distance'], x['Speed']), axis=1)
+# userpaces['PredictedTime'] = userpaces[['Distance', 'Speed']].apply(lambda x: calculate_overall_time(
+#    x['Distance'], x['Speed']), axis=1)
 
 ####################################################
 
-a = alt.Chart(records).mark_circle().encode(
+st.write(userpaces[['Event', 'PredictedPace', 'PredictedTime']])
+
+a = alt.Chart(userpaces).mark_circle().encode(
     x=alt.Y('Distance', scale=alt.Scale(type="log")),
-    y=alt.Y('Speed', scale=alt.Scale(type="log")),
-    color='Group',
-    tooltip=['Distance', 'Speed', 'Pace']
+    y=alt.Y('PredictedPace', scale=alt.Scale(type="log")),
+    tooltip=['Distance', 'PredictedPace', 'PredictedTime']
 )
 
 st.altair_chart(a)
-
-st.write(records[records.Group == 'User'][['Distance', 'Pace', 'Time']])
