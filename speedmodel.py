@@ -33,6 +33,8 @@ class SpeedModel:
 
         tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
+        tmp['Predicted Pace (min/km)'] = tmp['PredictedPace'].apply(seckm_to_minkm, decimals=1)
+
         tmp['Predicted Time (h:m:s)'] = tmp['PredictedTime'].apply(ParseTotalSeconds)
 
         return tmp
