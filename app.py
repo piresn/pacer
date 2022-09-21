@@ -8,6 +8,11 @@ from helpers import *
 
 st.title('Pace predictor')
 
+records_data = pd.read_csv('records.csv')
+model = SpeedModel(records_data)
+distance_map = dict(zip(records_data['Event'], records_data['Distance']))
+
+
 ####################################################
 
 with st.sidebar:
@@ -36,21 +41,23 @@ with st.sidebar:
         user_pace_sec = st.slider('sec',
                                         min_value=0, max_value=59, value=0, step=1)
 
+
+
 ####################################################
 
-model = SpeedModel(pd.read_csv('records.csv'))
 
-user_distance = model.export().set_index('Event').loc[user_event]['Distance'].iat[0]
+    user_distance = distance_map[user_event]
 
-UserPace = Pace()
-UserPace.pace_from_distance(meters=user_distance,
-                                    seconds=user_pace_sec,
-                                    minutes=user_pace_min,
-                                    hours=user_pace_hour)
+    UserPace = Pace()
+    UserPace.pace_from_distance(meters=user_distance,
+                                        seconds=user_pace_sec,
+                                        minutes=user_pace_min,
+                                        hours=user_pace_hour)
 
-user_score = model.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
+    user_score = model.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
 
-st.write(f'User pace: {UserPace.print()} is {model.print_user_score()}% of maximum speed.')
+    st.write(f'User pace: {UserPace.print()} is {model.print_user_score()}% of maximum speed.')
+
 
 ####################################################
 

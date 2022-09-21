@@ -30,8 +30,10 @@ class SpeedModel:
 
         return self.user_score
 
+
     def print_user_score(self, decimals=2):
         return round(self.user_score*100, 2)
+
 
     def predict_paces(self):
         tmp = self.records[self.records['Group'] == 'Men'][[
