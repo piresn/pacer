@@ -51,15 +51,14 @@ with st.sidebar:
                                      minutes=user_pace_min,
                                      hours=user_pace_hour)
 
-    UserPace.calculate_percentage_best(rawtable)
+    user_score = records.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
 
-
-    st.write(f'User pace: {UserPace.print()} is {round(UserPace.percentage_best*100, 2)}% of maximum speed.')
+    st.write(f'User pace: {UserPace.print()} is {round(user_score*100, 2)}% of maximum speed.')
 
 
 ####################################################
 
-userpaces = records.get_proportion_pace(proportion=UserPace.percentage_best)
+userpaces = records.get_proportion_pace(proportion=user_score)
 
 
 ####################################################

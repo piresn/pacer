@@ -19,7 +19,7 @@ class SpeedModel:
 
 
 
-    def calculate(self, distance, pace):
+    def calculate_user_score(self, distance, pace):
         best_men = self.records.loc[(self.records['Distance'] == distance) & (
         self.records['Group'] == 'Men')]['SecKm'].iat[0]
 

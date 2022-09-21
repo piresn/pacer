@@ -1,6 +1,4 @@
 from helpers import *
-from speedmodel import SpeedModel #TODO SpeedModel should be removed from Pace class
-
 class Pace:
     """
     Creates paces, store as seconds per km and print as min:sec per km.
@@ -16,10 +14,6 @@ class Pace:
         km = meters/1000
         self.distanceEvent = meters
         self.pace = time/km
-
-    def calculate_percentage_best(self, records): #TODO this method + SpeedModel should be removed from Pace class
-        s = SpeedModel(records)
-        self.percentage_best = s.calculate(self.distanceEvent, self.pace)
 
     def print(self, decimals=0, unit='minkm'):
 
