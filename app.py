@@ -48,20 +48,20 @@ with st.sidebar:
 
     user_distance = distance_map[user_event]
 
-    UserPace = Pace()
-    UserPace.pace_from_distance(meters=user_distance,
-                                        seconds=user_pace_sec,
-                                        minutes=user_pace_min,
-                                        hours=user_pace_hour)
+    UserPace = Pace(meters=user_distance,
+                    seconds=user_pace_sec,
+                    minutes=user_pace_min,
+                    hours=user_pace_hour)
 
-    user_score = model.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
+    user_score = model.calculate_user_score(user_distance, UserPace)
 
     st.write(f'User pace: {UserPace.print()} is {model.print_user_score()}% of maximum speed.')
 
 
 ####################################################
 
-userpaces = model.predict_paces()
+predict_method = st.radio('Select model', options=['Nuno', 'Riegel standard', 'Riegel elite'], index=1, horizontal = True)
+userpaces = model.predict_paces(predict_method)
 
 st.write(userpaces[['Event', 'Predicted Pace (min/km)', 'Predicted Time (h:m:s)']])
 
