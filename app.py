@@ -8,10 +8,6 @@ from helpers import *
 
 st.title('Pace predictor')
 
-records = SpeedModel(pd.read_csv('records.csv'))
-
-rawtable = pd.read_csv('records.csv') # TODO replace rawtable uses with SpeedModel methods
-
 ####################################################
 
 with st.sidebar:
@@ -42,26 +38,23 @@ with st.sidebar:
 
 ####################################################
 
-    UserPace = Pace()
+model = SpeedModel(pd.read_csv('records.csv'))
 
-    user_distance = rawtable.loc[rawtable['Event']==user_event]['Distance'].iat[0]
+user_distance = model.export().set_index('Event').loc[user_event]['Distance'].iat[0]
 
-    UserPace.pace_from_distance(meters=user_distance,
-                                     seconds=user_pace_sec,
-                                     minutes=user_pace_min,
-                                     hours=user_pace_hour)
+UserPace = Pace()
+UserPace.pace_from_distance(meters=user_distance,
+                                    seconds=user_pace_sec,
+                                    minutes=user_pace_min,
+                                    hours=user_pace_hour)
 
-    user_score = records.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
+user_score = model.calculate_user_score(user_distance, UserPace.print(unit='secskm'))
 
-    st.write(f'User pace: {UserPace.print()} is {round(user_score*100, 2)}% of maximum speed.')
-
-
-####################################################
-
-userpaces = records.get_proportion_pace(proportion=user_score)
-
+st.write(f'User pace: {UserPace.print()} is {model.print_user_score()}% of maximum speed.')
 
 ####################################################
+
+userpaces = model.predict_paces()
 
 st.write(userpaces[['Event', 'Predicted Pace (min/km)', 'Predicted Time (h:m:s)']])
 

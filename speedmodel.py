@@ -23,13 +23,21 @@ class SpeedModel:
         best_men = self.records.loc[(self.records['Distance'] == distance) & (
         self.records['Group'] == 'Men')]['SecKm'].iat[0]
 
-        return best_men/pace
+        if pace > 0:
+            self.user_score = best_men/pace
+        else:
+            self.user_score = 1
 
-    def get_proportion_pace(self, proportion):
+        return self.user_score
+
+    def print_user_score(self, decimals=2):
+        return round(self.user_score*100, 2)
+
+    def predict_paces(self):
         tmp = self.records[self.records['Group'] == 'Men'][[
             'Event', 'Distance', 'SecKm']].copy(deep=True)
         
-        tmp['PredictedPace'] = tmp['SecKm'] / proportion
+        tmp['PredictedPace'] = tmp['SecKm'] / self.user_score
 
         tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
