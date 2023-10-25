@@ -43,6 +43,9 @@ class SpeedModel:
 
     def create_time_model(self):
 
+        #TODO this is incorrect, as the X feature should be seconds, not distance.
+        # downstream applications need to be updated as well
+
         X=self.records.loc[self.records.Group=='Men', 'Distance'].values.reshape(-1, 1)
         y=self.records.loc[self.records.Group=='Men', 'SecKm'].values
 
