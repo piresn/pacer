@@ -20,7 +20,7 @@ class SpeedModel:
 
         self.records['SecKm'] = TotalSeconds / (self.records['Distance']/1000)
 
-        self.poly_degree = 2
+        self.poly_degree = 8
 
         self.time_model = self.create_time_model()
 
@@ -50,7 +50,7 @@ class SpeedModel:
         y=self.records.loc[self.records.Group=='Men', 'SecKm'].values
 
         poly_reg = PolynomialFeatures(degree=self.poly_degree)
-        X_poly = poly_reg.fit_transform(X)
+        X_poly = poly_reg.fit_transform(np.log(X))
         reg = LinearRegression()
         reg.fit(X_poly, y)
 
@@ -59,7 +59,7 @@ class SpeedModel:
     def predict_time_model(self, distance):
 
         poly = PolynomialFeatures(degree=self.poly_degree)
-        X_poly = poly.fit_transform(np.array([distance]).reshape(-1, 1))
+        X_poly = poly.fit_transform(np.log(np.array([distance])).reshape(-1, 1))
 
         out = self.time_model.predict(X_poly)
         return out[0]
