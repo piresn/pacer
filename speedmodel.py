@@ -1,4 +1,7 @@
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 from helpers import *
 
 class SpeedModel:
@@ -17,7 +20,7 @@ class SpeedModel:
 
         self.records['SecKm'] = TotalSeconds / (self.records['Distance']/1000)
 
-        self.time_model = self.create_time_model
+        self.time_model = self.create_time_model()
 
 
 
@@ -37,11 +40,17 @@ class SpeedModel:
 
     def create_time_model(self):
 
-        def model():
-            return 300
-        
-        return model()
+        lin_reg = LinearRegression()
+        X=self.records.loc[self.records.Group=='Men', 'Distance'].values.reshape(-1, 1)
+        y=self.records.loc[self.records.Group=='Men', 'SecKm'].values
+        lin_reg.fit(X, y)
 
+        return lin_reg
+
+    def predict_time_model(self, distance):
+        out = self.time_model.predict(np.array([distance]).reshape(-1, 1))
+        return out[0]
+        
     def print_user_score(self, decimals=2):
         return round(self.user_score*100, decimals)
 
@@ -57,7 +66,7 @@ class SpeedModel:
             tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
         if algorithm == 'Nuno_time':
-            tmp['PredictedPace'] = self.time_model()
+            tmp['PredictedPace'] = self.predict_time_model(tmp['Distance'])
             tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
 
