@@ -68,7 +68,7 @@ st.write(userpaces[['Event', 'Predicted Pace (min/km)', 'Predicted Time (h:m:s)'
 a = alt.Chart(userpaces).mark_circle().encode(
     x=alt.Y('Distance', scale=alt.Scale(type="log")),
     y=alt.Y('PredictedPace', scale=alt.Scale(type="log", zero=False)),
-    tooltip=['Event', 'Predicted Pace (min/km)', 'Predicted Time (h:m:s)']
+    tooltip=['Event', 'Predicted Pace (min/km)', 'Predicted Time (h\:m\:s)']
 )
 
 st.altair_chart(a)
