@@ -20,7 +20,10 @@ class SpeedModel:
 
         self.records['SecKm'] = TotalSeconds / (self.records['Distance']/1000)
 
+        self.poly_degree = 2
+
         self.time_model = self.create_time_model()
+
 
 
 
@@ -40,22 +43,29 @@ class SpeedModel:
 
     def create_time_model(self):
 
-        lin_reg = LinearRegression()
         X=self.records.loc[self.records.Group=='Men', 'Distance'].values.reshape(-1, 1)
         y=self.records.loc[self.records.Group=='Men', 'SecKm'].values
-        lin_reg.fit(X, y)
 
-        return lin_reg
+        poly_reg = PolynomialFeatures(degree=self.poly_degree)
+        X_poly = poly_reg.fit_transform(X)
+        reg = LinearRegression()
+        reg.fit(X_poly, y)
+
+        return reg
 
     def predict_time_model(self, distance):
-        out = self.time_model.predict(np.array([distance]).reshape(-1, 1))
+
+        poly = PolynomialFeatures(degree=self.poly_degree)
+        X_poly = poly.fit_transform(np.array([distance]).reshape(-1, 1))
+
+        out = self.time_model.predict(X_poly)
         return out[0]
         
     def print_user_score(self, decimals=2):
         return round(self.user_score*100, decimals)
 
 
-    def predict_paces(self, algorithm='Nuno_distance'):
+    def predict_paces(self, algorithm):
 
         tmp = self.records[self.records['Group'] == 'Men'][[
                 'Event', 'Distance', 'SecKm']].copy(deep=True)
@@ -66,7 +76,8 @@ class SpeedModel:
             tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
         if algorithm == 'Nuno_time':
-            tmp['PredictedPace'] = self.predict_time_model(tmp['Distance'])
+
+            tmp['PredictedPace'] = tmp['Distance'].apply(self.predict_time_model) /self.user_score           
             tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
 
 
