@@ -60,7 +60,7 @@ with st.sidebar:
 
 ####################################################
 
-predict_method = st.radio('Select model', options=['Nuno', 'Riegel standard', 'Riegel elite'], horizontal = True)
+predict_method = st.radio('Select model', options=['Nuno_distance', 'Nuno_time', 'Riegel standard', 'Riegel elite'], horizontal = True)
 userpaces = model.predict_paces(predict_method)
 
 st.write(userpaces[['Event', 'Predicted Pace (min/km)', 'Predicted Time (h:m:s)']])

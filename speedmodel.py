@@ -17,6 +17,8 @@ class SpeedModel:
 
         self.records['SecKm'] = TotalSeconds / (self.records['Distance']/1000)
 
+        self.time_model = self.create_time_model
+
 
 
     def calculate_user_score(self, distance, pace):
@@ -33,20 +35,31 @@ class SpeedModel:
 
         return self.user_score
 
+    def create_time_model(self):
+
+        def model():
+            return 300
+        
+        return model()
 
     def print_user_score(self, decimals=2):
         return round(self.user_score*100, decimals)
 
 
-    def predict_paces(self, algorithm='Nuno'):
+    def predict_paces(self, algorithm='Nuno_distance'):
 
         tmp = self.records[self.records['Group'] == 'Men'][[
                 'Event', 'Distance', 'SecKm']].copy(deep=True)
         
-        if algorithm == 'Nuno':
+        if algorithm == 'Nuno_distance':
     
             tmp['PredictedPace'] = tmp['SecKm'] / self.user_score
             tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
+
+        if algorithm == 'Nuno_time':
+            tmp['PredictedPace'] = self.time_model()
+            tmp['PredictedTime'] = tmp['Distance'] * 0.001 * tmp['PredictedPace']
+
 
         elif algorithm.startswith('Riegel'):
             # https://bmcsportsscimedrehabil.biomedcentral.com/articles/10.1186/s13102-016-0052-y
