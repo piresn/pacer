@@ -1,9 +1,10 @@
 ---
 title: Pacer
-emoji: 🌍
+emoji: 🏃🏽
 colorFrom: purple
 colorTo: indigo
 sdk: streamlit
+python_version: 3.9
 sdk_version: 1.10.0
 app_file: app.py
 pinned: false
